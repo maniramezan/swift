@@ -4,6 +4,8 @@ Globals:
   SwiftName: Struct1.newApiNoteVar
 - Name: IAMStruct1APINoteVarInSwift4
   SwiftName: Struct1.apiNoteVarInSwift4
+- Name: NSMyRandomSomeContextName
+  SwiftName: myRandom
 Functions:
 - Name: IAMStruct1APINoteFunction
   SwiftName: "Struct1.newApiNoteMethod()"
@@ -14,7 +16,15 @@ Typedefs:
   SwiftName: Struct1.NewApiNoteType
 - Name: IncompleteImportTargetName
   SwiftName: IncompleteImportTarget.Name
+- Name: NSSomeContext
+  SwiftName: SomeContext
+- Name: NSSomeContextName
+  SwiftName: SomeContext.Name
 SwiftVersions:
+- Version: 3
+  Globals:
+  - Name: NSMyRandomSomeContextName
+    SwiftName: myRandomSomeContextName
 - Version: 4
   Globals:
   - Name: IAMStruct1APINoteVar
@@ -31,3 +41,7 @@ SwiftVersions:
     SwiftName: Struct1.OldApiNoteType
   - Name: IncompleteImportTargetName
     SwiftWrapper: none
+  - Name: NSSomeContext
+    SwiftName: SomeContext
+  - Name: NSSomeContextName
+    SwiftName: SomeContext.Name

@@ -37,6 +37,29 @@
 // PRINT-NEXT:   func selfComesLast(x x: Double)
 // PRINT-NEXT:   func selfComesThird(a a: Int32, b b: Float, x x: Double)
 // PRINT-NEXT: }
+// PRINT:      struct SomeContext {
+// PRINT-NEXT:   var i: Int32
+// PRINT-NEXT:   init()
+// PRINT-NEXT:   init(i i: Int32)
+// PRINT-NEXT: }
+// PRINT-NEXT: @available(swift, obsoleted: 3, renamed: "SomeContext.Name")
+// PRINT-NEXT: typealias NSSomeContextName = SomeContext.Name
+// PRINT-NEXT: extension SomeContext {
+// PRINT-NEXT:    struct Name : Hashable, Equatable, _SwiftNewtypeWrapper, RawRepresentable {
+// PRINT-NEXT:      init(_ rawValue: String)
+// PRINT-NEXT:      init(rawValue rawValue: String)
+// PRINT-NEXT:      var _rawValue: NSString
+// PRINT-NEXT:      var rawValue: String { get }
+// PRINT-NEXT:      typealias RawValue = String
+// PRINT-NEXT:    }
+// PRINT-NEXT: }
+// PRINT:      @available(swift, obsoleted: 3, renamed: "SomeContext.Name.myRandom")
+// PRINT-NEXT: let NSMyRandomSomeContextName: SomeContext.Name
+// PRINT:      extension SomeContext.Name {
+// PRINT-NEXT:   static let myRandom: SomeContext.Name
+// PRINT-NEXT:   @available(swift, obsoleted: 4, renamed: "SomeContext.Name.myRandom")
+// PRINT-NEXT:   static let myRandomSomeContextName: SomeContext.Name
+// PRINT-NEXT: }
 // PRINT-NOT: static var static1: Double
 
 
@@ -137,3 +160,10 @@ iamStruct = Struct1.zero
 
 // Global properties
 currentStruct1.x += 1.5
+
+// Instance inner members
+let _: SomeContext.Name = .myRandomSomeContextName
+  // expected-error@-1{{'myRandomSomeContextName' has been renamed to 'SomeContext.Name.myRandom'}} {{27-51=SomeContext.Name.myRandom}}
+
+let _ = SomeContext.Name.myRandomSomeContextName
+// expected-error@-1{{'myRandomSomeContextName' has been renamed to 'SomeContext.Name.myRandom'}} {{9-49=SomeContext.Name.myRandom}}

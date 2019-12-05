@@ -1751,7 +1751,27 @@ static void fixItAvailableAttrRename(InFlightDiagnostic &diag,
       // If we're going from a var to a function with no arguments, emit an
       // empty parameter list.
       baseReplace += "()";
+    } else if (parsed.isClassMember()) {
+      // If there's a preceding dot, inclyde it into range. https://bugs.swift.org/browse/SR-8147
+      auto precedingChar = Lexer::getCharSourceRangeFromSourceRange(sourceMgr, referenceRange.Start.getAdvancedLoc(-1));
+      auto precedingStr = sourceMgr.extractText(precedingChar);
+      
+      if (precedingStr.startswith(".")) {
+        auto length = -1 - parsed.ContextName.size();
+        auto fullyQualifiedRange = SourceRange(referenceRange.Start.getAdvancedLoc(length), referenceRange.End);
+        
+        auto precedingChar = Lexer::getCharSourceRangeFromSourceRange(sourceMgr, fullyQualifiedRange);
+        auto str = sourceMgr.extractText(precedingChar);
+        
+        // Check to see if it's fully qualified name or not: MyContext.Name.myName vs .myName
+        if (str.startswith(parsed.ContextName)) {
+          referenceRange = fullyQualifiedRange;
+        } else {
+          referenceRange = SourceRange(referenceRange.Start.getAdvancedLoc(-1), referenceRange.End);
+        }
+      }
     }
+    
     diag.fixItReplace(referenceRange, baseReplace);
   }
 

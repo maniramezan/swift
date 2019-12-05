@@ -1,6 +1,9 @@
 #ifndef IMPORT_AS_MEMBER_H
 #define IMPORT_AS_MEMBER_H
 
+@import Foundation;
+@import CoreFoundation;
+
 struct __attribute__((swift_name("Struct1"))) IAMStruct1 {
   double x, y, z;
 };
@@ -56,5 +59,11 @@ extern void IAMStruct1SelfComesLast(double x, struct IAMStruct1 s)
     __attribute__((swift_name("Struct1.selfComesLast(x:self:)")));
 extern void IAMStruct1SelfComesThird(int a, float b, struct IAMStruct1 s, double x)
     __attribute__((swift_name("Struct1.selfComesThird(a:b:self:x:)")));
+
+// Nested types
+typedef struct {int i;} NSSomeContext;
+
+typedef NSString *NSSomeContextName __attribute__((swift_newtype(struct)));
+extern const NSSomeContextName NSMyRandomSomeContextName;
 
 #endif // IMPORT_AS_MEMBER_H
